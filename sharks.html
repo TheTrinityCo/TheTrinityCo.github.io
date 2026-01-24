@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Gap: Environmental Shift vs Institutional Response</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Coastal Calm - Warm neutrals (Stone/Sand) background with Deep Ocean Blue and Alert Orange accents for data distinction. -->
+
+    <!-- Application Structure Plan: 
+         1. Hero Section: Sets the tone using the "Gap" concept – the disconnect between changing reality and static systems.
+         2. "The Shift" Section (Radar Chart): Visualizes the multi-dimensional expansion of risk factors (Rain, Temp, Exposure) compared to historical norms. Users can toggle data to see the contrast.
+         3. "The Tempo" Section (Horizontal Bar Chart): Quantifies "Lag" by contrasting the speed of environmental events vs. institutional processes.
+         4. "Interactive Risk Model" (Dynamic Gauge/Input): An interactive calculator allowing users to manipulate conditions (Rainfall, Visibility, Temp) to understand the "Condition-based" risk model proposed in the text.
+         5. "The Bridge" (Grid Layout): A card-based actionable breakdown of the 5 key solutions proposed to close the gap.
+         
+         Rationale: This structure moves from Problem Definition -> Evidence (Data) -> Experience (Simulation) -> Solution, ensuring active engagement rather than passive reading.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Radar Chart: Goal: Compare. Method: Chart.js Radar. Justification: Best for showing how multiple variables have expanded simultaneously beyond a "safe" baseline.
+         2. Horizontal Bar Chart: Goal: Compare (Time). Method: Chart.js Bar. Justification: Clearly contrasts the short duration of events against the long duration of bureaucratic reviews.
+         3. Doughnut/Gauge Chart: Goal: Inform/Interact. Method: Chart.js Doughnut. Justification: Acts as a feedback mechanism for the "Risk Simulator" sliders, showing immediate impact of conditions.
+         4. Solutions Grid: Goal: Organize. Method: Tailwind CSS Grid. Justification: Clean, responsive layout for text-heavy recommendations without using forbidden diagrams.
+         
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* Stone-100 warm neutral */
+            color: #1c1917; /* Stone-900 */
+        }
+
+        /* Chart Container Strict Styling per requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Custom Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none; 
+            width: 100%; 
+            background: transparent; 
+        }
+        
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #0f766e; /* Teal-700 */
+            cursor: pointer;
+            margin-top: -6px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #d6d3d1; /* Stone-300 */
+            border-radius: 2px;
+        }
+
+        /* Card Hover Effects */
+        .solution-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .solution-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-teal-100 selection:text-teal-900">
+
+    <!-- Hero Section -->
+    <header class="bg-white border-b border-stone-200">
+        <div class="max-w-5xl mx-auto px-6 py-16 text-center">
+            <div class="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-wider text-teal-700 uppercase bg-teal-50 rounded-full">
+                Systemic Analysis
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-stone-800 mb-6 leading-tight">
+                The Gap: <span class="text-teal-700">Environmental Reality</span> vs. <span class="text-orange-600">Institutional Response</span>
+            </h1>
+            <p class="text-lg md:text-xl text-stone-600 max-w-3xl mx-auto leading-relaxed">
+                Coastal water temperatures are higher. Rainfall is more intense. Visibility is dropping. 
+                While the environment has shifted, our public safety systems remain organized around static models. 
+                Harm doesn't announce itself as failure—it arrives as <strong>lag</strong>.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-12 space-y-20">
+
+        <!-- Section 1: The Shift (Radar Chart) -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-5 space-y-6">
+                <h2 class="text-2xl font-bold text-stone-800 border-l-4 border-teal-600 pl-4">Environmental Reality Has Shifted</h2>
+                <p class="text-stone-600 leading-relaxed">
+                    The baseline for coastal safety has moved. We are witnessing a convergence of factors: higher water temperatures for longer periods, frequent heavy rainfall pushing sediment (and prey) into near-shore environments, and increased human exposure in "marginal" conditions.
+                </p>
+                <div class="bg-stone-50 p-6 rounded-lg border border-stone-200">
+                    <h3 class="font-semibold text-stone-800 mb-2">Key Observation</h3>
+                    <p class="text-sm text-stone-600">
+                        "Species that tolerate low visibility and mixed salinity are present in places and at times that used to sit outside everyday risk assumptions."
+                    </p>
+                </div>
+                <div class="flex gap-4 pt-4">
+                    <button id="btn-historic" class="px-4 py-2 bg-stone-200 text-stone-600 rounded-md font-medium text-sm hover:bg-stone-300 transition" onclick="updateRadar('historic')">Historical Norms</button>
+                    <button id="btn-current" class="px-4 py-2 bg-teal-700 text-white rounded-md font-medium text-sm hover:bg-teal-800 transition shadow-sm" onclick="updateRadar('current')">Current Reality</button>
+                </div>
+            </div>
+            <div class="lg:col-span-7 bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                <div class="mb-4 flex justify-between items-center border-b border-stone-100 pb-2">
+                    <span class="text-sm font-semibold text-stone-500 uppercase">Variable Expansion Analysis</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="shiftRadarChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Lag (Bar Chart) -->
+        <section class="bg-white rounded-2xl p-8 shadow-sm border border-stone-200">
+            <div class="max-w-4xl mx-auto text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4">The Problem is Tempo</h2>
+                <p class="text-stone-600 text-lg">
+                    Institutional responses are familiar, measured, and legible. They are also slow.
+                    When conditions move faster than institutions, "review" becomes a future tense that absorbs urgency without resolving it.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1 chart-container">
+                    <canvas id="tempoChart"></canvas>
+                </div>
+                <div class="order-1 md:order-2 space-y-6">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-xl mr-4">!</div>
+                        <div>
+                            <h3 class="font-bold text-stone-800 text-lg">The "Queue" Effect</h3>
+                            <p class="text-stone-600 mt-1">
+                                Offices reframe immediacy into workflow. "Can you send us an email?" moves urgency out of the present. By the time the system acts, conditions have moved again.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-xl mr-4">&#8635;</div>
+                        <div>
+                            <h3 class="font-bold text-stone-800 text-lg">Scale as Delay</h3>
+                            <p class="text-stone-600 mt-1">
+                                Calls for national or global strategies relocate responsibility to a scale where nothing changes in the near term.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Interactive Risk Model -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-4 bg-stone-800 text-white p-8 rounded-2xl flex flex-col justify-center">
+                <h2 class="text-2xl font-bold mb-4 text-orange-400">From Seasonal to Condition-Based</h2>
+                <p class="text-stone-300 mb-6">
+                    We must update our shared mental model. Risk is not a calendar date; it is a probabilistic combination of heat, rainfall, and visibility.
+                </p>
+                <p class="text-sm text-stone-400 italic">
+                    Use the simulation to see how changing environmental inputs drastically shifts the risk profile beyond "marginal."
+                </p>
+            </div>
+
+            <div class="lg:col-span-8 bg-white p-8 rounded-2xl shadow-sm border border-stone-200 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Controls -->
+                <div class="space-y-8">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-bold text-stone-700">Rainfall Intensity</label>
+                            <span id="val-rain" class="text-sm text-teal-600 font-mono">Moderate</span>
+                        </div>
+                        <input type="range" id="input-rain" min="1" max="100" value="30" class="w-full">
+                        <p class="text-xs text-stone-500 mt-1">Pushes sediment & prey into harbours.</p>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-bold text-stone-700">Water Temperature</label>
+                            <span id="val-temp" class="text-sm text-teal-600 font-mono">Average</span>
+                        </div>
+                        <input type="range" id="input-temp" min="1" max="100" value="50" class="w-full">
+                        <p class="text-xs text-stone-500 mt-1">Higher temps extend activity windows.</p>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-bold text-stone-700">Water Turbidity (Low Visibility)</label>
+                            <span id="val-vis" class="text-sm text-teal-600 font-mono">Clear</span>
+                        </div>
+                        <input type="range" id="input-vis" min="1" max="100" value="20" class="w-full">
+                        <p class="text-xs text-stone-500 mt-1">Visibility drops increase ambush risk.</p>
+                    </div>
+                </div>
+
+                <!-- Visualization -->
+                <div class="flex flex-col items-center justify-center">
+                    <div class="chart-container" style="height: 250px; max-height: 250px;">
+                        <canvas id="riskGauge"></canvas>
+                    </div>
+                    <div id="risk-text" class="text-center mt-4 font-bold text-xl text-stone-700">
+                        Calculating...
+                    </div>
+                    <p class="text-xs text-stone-400 text-center mt-2 max-w-xs">
+                        *Visualisation of how risk factors compound.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: The Path Forward (Action Cards) -->
+        <section>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-stone-800">Narrowing the Gap</h2>
+                <p class="text-stone-600 mt-3 max-w-2xl mx-auto">
+                    This doesn't require new legislation. It requires using existing authorities to act at the pace of environmental reality.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="solution-card bg-white p-6 rounded-xl border border-stone-200">
+                    <div class="h-10 w-10 bg-teal-50 rounded-lg flex items-center justify-center text-teal-700 text-lg font-bold mb-4">1</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Update the Mental Model</h3>
+                    <p class="text-sm text-stone-600">
+                        Shift public messaging from seasonal to condition-based. Clearly articulate that specific combinations of heat and turbidity materially change risk. Align intuition with guidance.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="solution-card bg-white p-6 rounded-xl border border-stone-200">
+                    <div class="h-10 w-10 bg-teal-50 rounded-lg flex items-center justify-center text-teal-700 text-lg font-bold mb-4">2</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Trigger-Based Advisories</h3>
+                    <p class="text-sm text-stone-600">
+                        Issue temporary, location-specific advisories based on known indicators (rainfall, temp) <em>before</em> harm occurs. Value lies in anticipation, not restriction.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="solution-card bg-white p-6 rounded-xl border border-stone-200">
+                    <div class="h-10 w-10 bg-teal-50 rounded-lg flex items-center justify-center text-teal-700 text-lg font-bold mb-4">3</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Context at the Water's Edge</h3>
+                    <p class="text-sm text-stone-600">
+                        Deploy temporary, plain-language signage in informal places during high-risk windows. Make risk visible where the concrete choice to swim is actually made.
+                    </p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="solution-card bg-white p-6 rounded-xl border border-stone-200">
+                    <div class="h-10 w-10 bg-teal-50 rounded-lg flex items-center justify-center text-teal-700 text-lg font-bold mb-4">4</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Centralize Data, Decentralize Choice</h3>
+                    <p class="text-sm text-stone-600">
+                        Don't leave individuals to interpret raw drone or listening station data. Institutions should interpret the signal; people should decide based on that guidance.
+                    </p>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="solution-card bg-white p-6 rounded-xl border border-stone-200">
+                    <div class="h-10 w-10 bg-teal-50 rounded-lg flex items-center justify-center text-teal-700 text-lg font-bold mb-4">5</div>
+                    <h3 class="font-bold text-stone-800 mb-2">State Reversibility Upfront</h3>
+                    <p class="text-sm text-stone-600">
+                        Demonstrate responsiveness. Use explicit sunset language for advisories and lift them visibly when conditions improve. This builds trust and avoids "permanent settings."
+                    </p>
+                </div>
+
+                <!-- Summary Card -->
+                <div class="solution-card bg-stone-800 p-6 rounded-xl border border-stone-700 text-white flex flex-col justify-center text-center">
+                    <h3 class="font-bold text-xl mb-2 text-orange-400">The Goal</h3>
+                    <p class="text-sm text-stone-300">
+                        "Governance catching up with the world it operates in."
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-stone-600 text-xs text-stone-400 uppercase tracking-widest">
+                        Act Early • Act Visibly
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-12 mt-12 border-t border-stone-800">
+        <div class="max-w-5xl mx-auto px-6 text-center text-sm">
+            <p class="mb-2">&copy; 2023 Analysis Dashboard.</p>
+            <p>Generated based on source report: "The Gap - Environmental Reality vs Institutional Response".</p>
+        </div>
+    </footer>
+
+    <!-- LOGIC & CHARTS -->
+    <script>
+        // --- UTILITY: Label Wrapping ---
+        const wrapLabel = (str, maxLen = 16) => {
+            if (str.length <= maxLen) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + 1 + words[i].length <= maxLen) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        };
+
+        const commonTooltip = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    const label = item.chart.data.labels[item.dataIndex];
+                    return Array.isArray(label) ? label.join(' ') : label;
+                }
+            }
+        };
+
+        // --- CHART 1: RADAR (The Shift) ---
+        const ctxRadar = document.getElementById('shiftRadarChart').getContext('2d');
+        const radarData = {
+            labels: [
+                wrapLabel('Water Temperature Duration'), 
+                wrapLabel('Rainfall Intensity'), 
+                wrapLabel('Turbidity & Sediment'), 
+                wrapLabel('Prey Movement Inshore'), 
+                wrapLabel('Human Exposure Hours')
+            ],
+            datasets: [{
+                label: 'Historical Norms',
+                data: [40, 30, 30, 35, 45],
+                fill: true,
+                backgroundColor: 'rgba(168, 162, 158, 0.2)', // Stone-400
+                borderColor: 'rgba(168, 162, 158, 1)',
+                pointBackgroundColor: 'rgba(168, 162, 158, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(168, 162, 158)'
+            }, {
+                label: 'Current Reality',
+                data: [85, 80, 90, 75, 85],
+                fill: true,
+                backgroundColor: 'rgba(13, 148, 136, 0.2)', // Teal-600
+                borderColor: 'rgba(13, 148, 136, 1)',
+                pointBackgroundColor: 'rgba(13, 148, 136, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(13, 148, 136)'
+            }]
+        };
+
+        const radarChart = new Chart(ctxRadar, {
+            type: 'radar',
+            data: radarData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: '#e5e7eb' },
+                        grid: { color: '#e5e7eb' },
+                        pointLabels: {
+                            font: { size: 11, family: 'Inter' },
+                            color: '#4b5563'
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                },
+                plugins: {
+                    tooltip: commonTooltip,
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Function to toggle radar datasets
+        function updateRadar(view) {
+            if(view === 'historic') {
+                radarChart.data.datasets[0].hidden = false;
+                radarChart.data.datasets[1].hidden = true;
+                document.getElementById('btn-historic').classList.add('bg-stone-300');
+                document.getElementById('btn-current').classList.remove('bg-teal-800');
+                document.getElementById('btn-current').classList.add('bg-teal-700');
+            } else {
+                radarChart.data.datasets[0].hidden = false;
+                radarChart.data.datasets[1].hidden = false;
+                document.getElementById('btn-historic').classList.remove('bg-stone-300');
+                document.getElementById('btn-current').classList.add('bg-teal-800');
+            }
+            radarChart.update();
+        }
+
+        // --- CHART 2: BAR (The Tempo) ---
+        const ctxBar = document.getElementById('tempoChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: [
+                    wrapLabel('Environmental Change Event'), 
+                    wrapLabel('Public Perception'), 
+                    wrapLabel('Institutional Review'), 
+                    wrapLabel('Strategic Implementation')
+                ],
+                datasets: [{
+                    label: 'Response Velocity (Lower is Faster)',
+                    data: [10, 25, 85, 95], // Arbitrary units representing relative time
+                    backgroundColor: [
+                        'rgba(249, 115, 22, 0.7)', // Orange (Fast/Urgent)
+                        'rgba(249, 115, 22, 0.4)',
+                        'rgba(68, 64, 60, 0.6)', // Stone (Slow/Static)
+                        'rgba(68, 64, 60, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(249, 115, 22, 1)',
+                        'rgba(249, 115, 22, 1)',
+                        'rgba(68, 64, 60, 1)',
+                        'rgba(68, 64, 60, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: commonTooltip,
+                    title: {
+                        display: true,
+                        text: 'Speed of Event vs. Speed of Process',
+                        font: { size: 14, family: 'Inter', weight: 'normal' },
+                        color: '#78716c'
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        title: { display: true, text: 'Time / Duration' },
+                        ticks: { display: false } // Abstract time
+                    },
+                    y: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // --- INTERACTIVITY: RISK SIMULATOR ---
+        const rainInput = document.getElementById('input-rain');
+        const tempInput = document.getElementById('input-temp');
+        const visInput = document.getElementById('input-vis');
+        
+        const rainVal = document.getElementById('val-rain');
+        const tempVal = document.getElementById('val-temp');
+        const visVal = document.getElementById('val-vis');
+        const riskText = document.getElementById('risk-text');
+
+        const ctxGauge = document.getElementById('riskGauge').getContext('2d');
+        
+        // Gauge Chart
+        const riskGauge = new Chart(ctxGauge, {
+            type: 'doughnut',
+            data: {
+                labels: ['Risk Level', 'Safety Margin'],
+                datasets: [{
+                    data: [30, 70],
+                    backgroundColor: ['#d6d3d1', '#f5f5f4'], // Initial Grey
+                    borderWidth: 0,
+                    cutout: '75%',
+                    rotation: -90,
+                    circumference: 180
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: { enabled: false },
+                    legend: { display: false }
+                }
+            }
+        });
+
+        function updateRiskModel() {
+            // Inputs 0-100
+            const rain = parseInt(rainInput.value);
+            const temp = parseInt(tempInput.value);
+            const vis = parseInt(visInput.value); // High value = High Turbidity (Bad Vis)
+
+            // Text Updates
+            rainVal.textContent = rain < 33 ? "Low" : rain < 66 ? "Moderate" : "Heavy";
+            tempVal.textContent = temp < 33 ? "Cool" : temp < 66 ? "Average" : "Warm/High";
+            visVal.textContent = vis < 33 ? "Clear" : vis < 66 ? "Murky" : "Turbid/Opaque";
+
+            // Risk Calc (Simple Weighted Model)
+            // Report says: Heat + Rainfall + Turbidity = Risk
+            let riskScore = (rain * 0.3) + (temp * 0.3) + (vis * 0.4);
+            
+            // Color Logic
+            let color = '#0f766e'; // Teal (Safe)
+            let status = "Standard Conditions";
+
+            if (riskScore > 40) {
+                color = '#f59e0b'; // Amber
+                status = "Elevated Risk";
+            }
+            if (riskScore > 70) {
+                color = '#ea580c'; // Orange Red
+                status = "High Condition-Based Risk";
+            }
+
+            // Update Text
+            riskText.innerHTML = status;
+            riskText.style.color = color;
+
+            // Update Chart
+            riskGauge.data.datasets[0].backgroundColor = [color, '#e7e5e4'];
+            riskGauge.data.datasets[0].data = [riskScore, 100 - riskScore];
+            riskGauge.update();
+        }
+
+        // Listeners
+        [rainInput, tempInput, visInput].forEach(input => {
+            input.addEventListener('input', updateRiskModel);
+        });
+
+        // Init
+        updateRiskModel();
+
+    </script>
+</body>
+</html>
