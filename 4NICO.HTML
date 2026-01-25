@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trinity Collective | The Ecology of Institutional Lag</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent-gold: #d97706;
+            --accent-red: #dc2626;
+            --border-subtle: #e2e8f0;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            max-height: 400px;
+            margin: 0 auto;
+        }
+
+        .chart-container-lg {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            max-height: 500px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-active { background-color: #22c55e; }
+        .status-critical { background-color: #dc2626; }
+    </style>
+    <!-- Chosen Palette: Reform Realism - Clean Slate background with high-contrast Amber/Red accents. -->
+    <!-- Application Structure Plan:
+         1. Header: Trinity Collective Identity with 4NICO Reference.
+         2. Context: The "Institutional Lag" problem - Why we talk but don't act.
+         3. Interactive Core: The "Sensory Blind Spot Simulator" - Testing the 45mm threshold.
+         4. Evidence: Jan 2026 Spate Analysis mapping rain to interactions.
+         5. Solution: Shifting resources from Theatre to Action. -->
+    <!-- Visualization & Content Choices:
+         1. Gauge Chart: Real-time risk scoring based on rain/temp/turbidity.
+         2. Mixed Bar/Line: Visual proof of the environmental triggers during the Jan spate.
+         3. Resource Allocation Chart: Highlighting the imbalance in government focus. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-3 h-12 bg-amber-600 rounded-sm"></div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-tight text-slate-900 uppercase">Trinity Collective</h1>
+                    <p class="text-xs font-bold text-amber-600 tracking-widest uppercase">Australia Day Reform Protocol</p>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-500">
+                <span class="flex items-center"><span class="status-indicator status-active" id="sys-status"></span> System Active</span>
+                <span class="font-mono text-xs bg-slate-100 px-2 py-1 rounded">REF: 4NICO</span>
+                <button onclick="scrollToSection('simulator')" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg transition-colors">
+                    Access Simulator
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        
+        <section class="py-16 bg-slate-50 text-center">
+            <div class="max-w-4xl mx-auto px-4">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">
+                    Why are we so good at talking <br>and so bad at <span class="text-amber-600 decoration-4 underline decoration-amber-200">getting things done</span>?
+                </h2>
+                <p class="text-lg text-slate-600 mb-8 leading-relaxed max-w-3xl mx-auto">
+                    The events of January 2026 proved that safety is <strong>condition-based</strong>, not seasonal. 
+                    The Trinity Collective has called time on institutional decay. We no longer wait for permission to protect our communities.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto mt-12 text-left">
+                    <div class="p-4 border-l-4 border-slate-300 bg-white shadow-sm">
+                        <h3 class="font-bold text-slate-900">The Theatre</h3>
+                        <p class="text-sm text-slate-500">Mourning without mandate. Repeated rituals of empty grief.</p>
+                    </div>
+                    <div class="p-4 border-l-4 border-amber-500 bg-white shadow-sm">
+                        <h3 class="font-bold text-slate-900">Institutional Lag</h3>
+                        <p class="text-sm text-slate-500">The fatal gap between condition change and system response.</p>
+                    </div>
+                    <div class="p-4 border-l-4 border-red-600 bg-white shadow-sm">
+                        <h3 class="font-bold text-slate-900">The 4NICO Mandate</h3>
+                        <p class="text-sm text-slate-500">Immediate, local action based on the 45mm rainfall threshold.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="simulator" class="py-16 bg-white border-y border-slate-200">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="mb-12">
+                    <span class="text-amber-600 font-mono text-sm font-bold uppercase tracking-wider">Operational Logic</span>
+                    <h2 class="text-3xl font-bold text-slate-900 mt-2">Sensory Blind Spot Simulator</h2>
+                    <p class="text-slate-600 mt-4 max-w-2xl">
+                        When heavy rainfall creates brackish conditions, vision-based patrols (drones/helicopters) fail. This is the <strong>Sensory Blind Spot</strong>. Use this tool to determine the required local safety mandate.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-5 space-y-8">
+                        <div class="card p-6 bg-slate-50 border-slate-200">
+                            <h3 class="font-bold text-slate-900 mb-6 flex items-center gap-2">🛠 Environmental Inputs</h3>
+                            
+                            <div class="mb-6">
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-sm font-bold text-slate-700">Rainfall (24h Window)</label>
+                                    <span id="rain-val" class="font-mono text-amber-600 font-bold">10 mm</span>
+                                </div>
+                                <input type="range" id="rain-in" min="0" max="100" value="10" class="slider-thumb">
+                            </div>
+
+                            <div class="mb-6">
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-sm font-bold text-slate-700">Water Temperature</label>
+                                    <span id="temp-val" class="font-mono text-amber-600 font-bold">21 °C</span>
+                                </div>
+                                <input type="range" id="temp-in" min="15" max="30" value="21" class="slider-thumb">
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-sm font-bold text-slate-700">Turbidity (Clarity)</label>
+                                    <span id="vis-val" class="font-mono text-amber-600 font-bold">Low</span>
+                                </div>
+                                <input type="range" id="vis-in" min="0" max="100" value="20" class="slider-thumb">
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 italic">Reference Logic: 4NICO Protocol // Threshold 45mm Rain / 24°C Temp.</p>
+                    </div>
+
+                    <div class="lg:col-span-7">
+                        <div class="card p-8 h-full flex flex-col items-center justify-center relative overflow-hidden border-2">
+                            <div id="status-banner" class="absolute top-0 left-0 w-full py-2 bg-slate-100 text-slate-500 text-center text-xs font-bold uppercase tracking-widest">
+                                Status: Baseline
+                            </div>
+                            <div class="chart-container mt-8">
+                                <canvas id="gaugeChart"></canvas>
+                            </div>
+                            <div id="mandate-box" class="mt-6 text-center max-w-md p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h4 class="font-bold text-slate-900 mb-2">Protocol: OBSERVATION</h4>
+                                <p class="text-sm text-slate-600">Standard operational conditions. Monitor environmental flux.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="mb-10 text-center">
+                    <span class="text-red-600 font-mono text-xs font-bold uppercase tracking-widest">The Spate Evidence</span>
+                    <h2 class="text-3xl font-bold text-slate-900 mt-2">Rainfall vs. Interaction (Jan 2026)</h2>
+                </div>
+                <div class="card p-6 md:p-8 bg-white">
+                    <div class="chart-container-lg">
+                        <canvas id="spateChart"></canvas>
+                    </div>
+                    <div class="mt-6 p-4 bg-amber-50 rounded border border-amber-100 text-sm text-amber-800">
+                        <strong>Correlation Detected:</strong> The peak in interactions (Jan 18-19) followed the 58mm rainfall event by less than 24 hours. The lag between the storm and the safety warning was 48 hours. This is where the tragedy occurred.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 bg-white border-t">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold text-slate-900 mb-6">Theatre vs. Action</h2>
+                        <div class="space-y-6 text-slate-600">
+                            <div class="p-4 bg-slate-50 rounded border-l-4 border-slate-400">
+                                <h4 class="font-bold text-slate-900">Institutional Theatre (Status Quo)</h4>
+                                <p class="text-sm">High-visibility media briefings, centralized strategy meetings, and seasonal patrols that ignore daily environmental flux.</p>
+                            </div>
+                            <div class="p-4 bg-amber-50 rounded border-l-4 border-amber-500">
+                                <h4 class="font-bold text-amber-900 text-slate-900">Local Action (Trinity/4NICO)</h4>
+                                <p class="text-sm">Low-cost, high-impact temporary signage and real-time community engagement triggered by the 45mm threshold.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-8 border border-slate-100">
+                        <h3 class="text-center font-bold text-xs uppercase text-slate-400 mb-4">Capacity Spent on Optics vs. Safety</h3>
+                        <div class="chart-container">
+                            <canvas id="resourceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-slate-900 text-slate-300 py-12 text-center">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-2xl text-white font-bold italic tracking-tight uppercase">Governing with the Tempo of the Tide.</h2>
+                <p class="mt-4 text-slate-400 max-w-xl mx-auto">
+                    The First Action is complete. The Second Action Approaches. Australia Day 2026 is the moment we choose local action over institutional decay.
+                </p>
+                <div class="mt-8 pt-8 border-t border-slate-800 text-[10px] flex justify-center gap-6 font-mono text-slate-600">
+                    <span>PROTOCOL: 4NICO</span>
+                    <span>ACTION: TRINITY COLLECTIVE</span>
+                    <span>CITE: JAN-26-SPATE</span>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        const rainIn = document.getElementById('rain-in');
+        const tempIn = document.getElementById('temp-in');
+        const visIn = document.getElementById('vis-in');
+        const rainVal = document.getElementById('rain-val');
+        const tempVal = document.getElementById('temp-val');
+        const visVal = document.getElementById('vis-val');
+        const statusBanner = document.getElementById('status-banner');
+        const mandateBox = document.getElementById('mandate-box');
+        const sysStatus = document.getElementById('sys-status');
+
+        const ctxGauge = document.getElementById('gaugeChart').getContext('2d');
+        const gaugeChart = new Chart(ctxGauge, {
+            type: 'doughnut',
+            data: {
+                labels: ['Risk', 'Safety'],
+                datasets: [{
+                    data: [10, 90],
+                    backgroundColor: ['#d97706', '#f1f5f9'],
+                    borderWidth: 0,
+                    circumference: 180,
+                    rotation: 270,
+                    cutout: '85%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { enabled: false } }
+            }
+        });
+
+        function update() {
+            const r = parseInt(rainIn.value);
+            const t = parseInt(tempIn.value);
+            const v = parseInt(visIn.value);
+            rainVal.innerText = r + " mm";
+            tempVal.innerText = t + " °C";
+            visVal.innerText = v < 40 ? "Clear" : (v < 75 ? "Brackish" : "Opaque");
+
+            const isCritical = (r >= 45) || (t >= 24) || (v >= 75);
+            let score = (r * 0.4) + ((t - 15) * 4) + (v * 0.2);
+            if(score > 100) score = 100;
+
+            gaugeChart.data.datasets[0].data = [score, 100 - score];
+            gaugeChart.data.datasets[0].backgroundColor[0] = isCritical ? '#dc2626' : '#d97706';
+            gaugeChart.update();
+
+            if (isCritical) {
+                statusBanner.innerText = "MANDATE ACTIVE: SENSORY BLIND SPOT";
+                statusBanner.className = "absolute top-0 left-0 w-full py-2 bg-red-600 text-white text-center text-xs font-bold uppercase tracking-widest";
+                mandateBox.innerHTML = "<h4 class='font-bold text-red-700'>IMMEDIATE REFORM MANDATE</h4><p class='text-xs text-red-800 font-medium'>45mm Rain Threshold Exceeded. Deploy local signage now. Call time on the lag.</p>";
+                sysStatus.className = "status-indicator status-critical";
+            } else {
+                statusBanner.innerText = "Status: Baseline";
+                statusBanner.className = "absolute top-0 left-0 w-full py-2 bg-slate-100 text-slate-500 text-center text-xs font-bold uppercase tracking-widest";
+                mandateBox.innerHTML = "<h4 class='font-bold text-slate-900'>PROTOCOL: OBSERVATION</h4><p class='text-xs text-slate-600'>Conditions within parameters. Standard monitoring active.</p>";
+                sysStatus.className = "status-indicator status-active";
+            }
+        }
+
+        rainIn.addEventListener('input', update);
+        tempIn.addEventListener('input', update);
+        visIn.addEventListener('input', update);
+        update();
+
+        const ctxSpate = document.getElementById('spateChart').getContext('2d');
+        new Chart(ctxSpate, {
+            type: 'bar',
+            data: {
+                labels: ['Jan 15', 'Jan 16', 'Jan 17', 'Jan 18', 'Jan 19', 'Jan 20', 'Jan 21'],
+                datasets: [
+                    { label: 'Interactions', type: 'line', data: [0, 0, 0, 2, 2, 0, 0], borderColor: '#dc2626', backgroundColor: '#dc2626', pointRadius: 8, yAxisID: 'y1' },
+                    { label: 'Rainfall (mm)', data: [5, 12, 58, 48, 20, 10, 2], backgroundColor: 'rgba(59, 130, 246, 0.4)', yAxisID: 'y' }
+                ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { position: 'left', title: {display: true, text: 'Rain (mm)'} }, y1: { position: 'right', max: 5, grid: { display: false }, title: {display: true, text: 'Incidents'} } } }
+        });
+
+        const ctxResource = document.getElementById('resourceChart').getContext('2d');
+        new Chart(ctxResource, {
+            type: 'bar',
+            data: {
+                labels: ['Media Performance', 'Institutional Diligence', 'Public Grief', 'Data Adaptation', 'Local Action'],
+                datasets: [{ label: 'Capacity (%)', data: [85, 75, 90, 10, 5], backgroundColor: ['#94a3b8', '#94a3b8', '#94a3b8', '#d97706', '#d97706'] }]
+            },
+            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { max: 100 } } }
+        });
+
+        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+    </script>
+</body>
+</html>
