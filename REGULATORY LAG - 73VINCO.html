@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRINITY RELAY | THE GAP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --text-primary: #e2e8f0;
+            --trinity-gold: #fbbf24;
+            --panel-bg: #0a0a0a;
+            --border-muted: #1e293b;
+            --font-header: 'Inter', system-ui, sans-serif;
+            --font-body: 'Georgia', serif;
+        }
+        body { background-color: var(--bg-primary); color: var(--text-primary); font-family: var(--font-body); line-height: 1.8; margin: 0; padding: 0; }
+        .relay-wrapper { max-width: 850px; margin: 0 auto; padding: 20px 40px 80px 40px; }
+        
+        /* The Magnum 45 Header - Exact Phrasing */
+        .trinity-interface { 
+            font-family: var(--font-header); 
+            font-weight: 900; 
+            font-size: 0.75rem; 
+            letter-spacing: 0.5em; 
+            color: #ffffff; 
+            text-transform: uppercase; 
+            margin-bottom: 30px; 
+            text-align: left; 
+            border-left: 4px solid var(--trinity-gold); 
+            padding: 5px 15px;
+            background: linear-gradient(90deg, #1e293b 0%, transparent 100%);
+        }
+        
+        header { background-color: #0f172a; border-bottom: 8px solid var(--trinity-gold); padding: 50px; border-radius: 2px; margin-bottom: 60px; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8); }
+        h1 { font-family: var(--font-header); font-size: 3.4rem; line-height: 1; color: #ffffff; margin: 0; font-weight: 900; text-transform: uppercase; letter-spacing: -0.05em; }
+        .subtitle { font-family: var(--font-header); font-size: 1.4rem; color: #94a3b8; margin-top: 25px; font-weight: 600; text-align: left; border-top: 1px solid #1e293b; padding-top: 20px; }
+
+        /* Prestige Typography - Bold Yellow Headings */
+        h2 { font-family: var(--font-header); font-size: 2.6rem; color: var(--trinity-gold); font-weight: 900; margin-top: 80px; margin-bottom: 25px; letter-spacing: -0.03em; line-height: 1.1; }
+        p { font-size: 1.35rem; margin-bottom: 35px; color: #cbd5e1; text-align: justify; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 40px 0; font-family: var(--font-header); font-size: 1rem; background-color: var(--panel-bg); border: 1px solid var(--border-muted); }
+        th { background-color: #111; color: var(--trinity-gold); text-transform: uppercase; letter-spacing: 2px; padding: 22px; border: 1px solid var(--border-muted); font-weight: 900; }
+        td { padding: 18px; border: 1px solid var(--border-muted); color: #cbd5e1; }
+    </style>
+</head>
+<body>
+
+<div class="relay-wrapper">
+    <div class="trinity-interface">Trinity Collective: Your Interface to the Revolution</div>
+
+    <header>
+        <h1>THE GAP: <span style="color: var(--trinity-gold);">ENVIRONMENTAL REALITY</span><br>VS INSTITUTIONAL RESPONSE</h1>
+        <p class="subtitle">A strategic analysis of climate-linked coastal risk and the persistence of reactive governance.</p>
+    </header>
+
+    <section>
+        <h2>The Spatio-Temporal Spate of January 2026: An Anatomy of Crisis</h2>
+        <p>The events of mid-January 2026 along the New South Wales coastline represent a definitive signal of an evolving environmental reality. Within a forty-eight-hour window, the state recorded a cluster of four distinct shark interactions—the highest recorded for a January period in the last decade.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Activity</th>
+                    <th>Location</th>
+                    <th>Species</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>2026-01-18</td><td>Swimming</td><td>Vaucluse (Harbour)</td><td>Bull</td><td>Fatal</td></tr>
+                <tr><td>2026-01-18</td><td>Swimming</td><td>Vaucluse (Harbour)</td><td>Bull</td><td>Critical</td></tr>
+                <tr><td>2026-01-19</td><td>Surfing</td><td>North Steyne</td><td>Bull (Suspected)</td><td>Critical</td></tr>
+                <tr><td>2026-01-20</td><td>Surfing</td><td>Point Plomer</td><td>Unknown</td><td>Minor</td></tr></tbody></table>
+          <p>This unprecedented cluster triggered an immediate institutional reaction. However, the response remains post-hoc; the institutional tempo arrives after the harm has manifested, rather than calibrating based on environmental cues.</p>
+
+<section class="my-12 bg-slate-900 p-8 rounded-lg border-2 border-amber-500/50 shadow-2xl">
+    <h3 class="text-amber-500 font-black uppercase tracking-widest mb-6 text-center">Live Risk Calibration</h3>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div class="space-y-8">
+            <div>
+                <div class="flex justify-between mb-2 text-xs font-black text-slate-400 uppercase">
+                    <span>Rainfall Intensity</span>
+                    <span id="val-rain" class="text-amber-500 font-mono">30mm</span>
+                </div>
+                <input type="range" id="input-rain" min="0" max="100" value="30" class="w-full accent-amber-500">
+            </div>
+            <div>
+                <div class="flex justify-between mb-2 text-xs font-black text-slate-400 uppercase">
+                    <span>Water Temperature</span>
+                    <span id="val-temp" class="text-amber-500 font-mono">19°C</span>
+                </div>
+                <input type="range" id="input-temp" min="15" max="28" value="19" class="w-full accent-amber-500">
+            </div>
+            <div>
+                <div class="flex justify-between mb-2 text-xs font-black text-slate-400 uppercase">
+                    <span>Turbidity</span>
+                    <span id="val-vis" class="text-amber-500 font-mono">Clear</span>
+                </div>
+                <input type="range" id="input-vis" min="0" max="100" value="20" class="w-full accent-amber-500">
+            </div>
+        </div>
+
+        <div class="flex flex-col items-center">
+            <div style="height: 250px; width: 100%;"><canvas id="riskGauge"></canvas></div>
+            <div id="risk-status" class="mt-4 px-6 py-4 border-2 border-amber-500 text-amber-500 font-black uppercase tracking-widest italic text-center w-full min-h-[80px] flex items-center justify-center">
+                Standard Baseline
+            </div>
+        </div>
+    </div>
+</section>        <h2>Shark Spotters Protocol: Lessons in Tempo</h2>
+        <p>South Africa’s "Shark Spotters" program offers the most advanced model for narrowing the gap. Their inclusion of the <strong>"Black Flag"</strong>—indicating poor spotting conditions—is an essential evolution in risk management. It informs the user that even if no shark has been seen, the ability to detect one is compromised.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Flag</th>
+                    <th>Signal</th>
+                    <th>Trigger</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td style="color: #4ade80; font-weight: 900;">GREEN</td><td>Good spotting conditions.</td><td>High visibility; no sharks detected.</td></tr>
+                <tr><td style="color: #ffffff; font-weight: 900; background: #000;">BLACK</td><td>Conditions Compromised.</td><td>High turbidity; detection tools ineffective.</td></tr>
+                <tr><td style="color: #f87171; font-weight: 900;">RED</td><td>High Alert.</td><td>Sighting within 1 hour; conditions conducive.</td></tr>
+                <tr><td style="color: #ffffff; font-weight: 900; background: #991b1b;">WHITE</td><td>Immediate Danger.</td><td>Active sighting near users; siren active.</td></tr>
+            </tbody>
+        </table>
+    </section>
+<section>
+        <h2>The Strategic Roadmap: Closing The Gap</h2>
+        <p>The transition toward a safer future requires the willingness to use tools that already exist at the pace of environmental reality. These phases represent the "Advice for the Revolution."</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-10">
+            <div class="p-8 rounded-lg border-2 border-slate-800 bg-slate-900 shadow-xl flex flex-col">
+                <p class="font-black text-yellow-500 uppercase text-xs mb-4 tracking-widest">Phase 01: Detection</p>
+                <h3 style="margin-top:0; color:#fff;" class="text-xl font-bold mb-3 uppercase">Sensor-to-Citizen</h3>
+                <p style="color:#94a3b8; text-align: left;" class="text-sm leading-relaxed italic">Automate warnings based on real-time turbidity. Digital signage at beach entries updates instantly, removing the human lag from the relay.</p>
+            </div>
+            <div class="p-8 rounded-lg border-2 border-slate-800 bg-slate-900 shadow-xl flex flex-col">
+                <p class="font-black text-yellow-500 uppercase text-xs mb-4 tracking-widest">Phase 02: Trust</p>
+                <h3 style="margin-top:0; color:#fff;" class="text-xl font-bold mb-3 uppercase">Sunset-by-Default</h3>
+                <p style="color:#94a3b8; text-align: left;" class="text-sm leading-relaxed italic">Advisories expire automatically after 48h unless data justifies an extension. High-order trust is built through precision, not permanence.</p>
+            </div>
+            <div class="p-8 rounded-lg border-2 border-slate-800 bg-slate-900 shadow-xl flex flex-col">
+                <p class="font-black text-yellow-500 uppercase text-xs mb-4 tracking-widest">Phase 03: Precision</p>
+                <h3 style="margin-top:0; color:#fff;" class="text-xl font-bold mb-3 uppercase">Anticipatory Model</h3>
+                <p style="color:#94a3b8; text-align: left;" class="text-sm leading-relaxed italic">Shift patrol resources based on correlated data (Rain + Temp) rather than static calendars. We act where the environment dictates, not where tradition remains.</p>
+            </div>
+        </div>
+<div class="p-8 rounded-lg border-2 border-slate-800 bg-slate-900 shadow-xl flex flex-col border-amber-500/20">
+                <p class="font-black text-amber-500 uppercase text-xs mb-4 tracking-widest">Phase 04: Predictive</p>
+                <h3 style="margin-top:0; color:#fff;" class="text-xl font-bold mb-3 uppercase">Synthetic Intelligence</h3>
+                <p style="color:#94a3b8; text-align: left;" class="text-sm leading-relaxed italic">
+                    Deploy a "Digital Twin" model using satellite and estuary sensors. This node predicts the <strong>Sensory Blind Spot</strong> 12h before triggers are hit, shifting the relay from reactive to anticipatory.
+                </p>
+            </div>
+    </section>
+
+    <footer class="mt-20 pt-10 border-t border-slate-800 font-sans text-[10px] tracking-[0.5em] text-slate-600 uppercase text-center">
+        Relay Service // Trinity Collective // Action Through Emergence
+    </footer>
+</div>
+
+<script>
+    // 1. Link the nodes
+    const rainIn = document.getElementById('input-rain');
+    const tempIn = document.getElementById('input-temp');
+    const visIn = document.getElementById('input-vis');
+    const statusBox = document.getElementById('risk-status');
+
+    // 2. Draw the Horseshoe
+    const ctx = document.getElementById('riskGauge').getContext('2d');
+    const gauge = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [30, 70],
+                backgroundColor: ['#fbbf24', '#1e293b'], 
+                borderWidth: 0,
+                cutout: '75%',
+                rotation: -90,
+                circumference: 180
+            }]
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { legend: { display: false }, tooltip: { enabled: false } } 
+        }
+    });
+
+    // 3. The Logic
+    function refresh() {
+        const r = parseInt(rainIn.value);
+        const t = parseInt(tempIn.value);
+        const v = parseInt(visIn.value);
+
+        document.getElementById('val-rain').textContent = r + "mm";
+        document.getElementById('val-temp').textContent = t + "°C";
+        document.getElementById('val-vis').textContent = v < 40 ? "Clear" : "Opaque";
+
+        // JD's Critical Triggers
+        const isAlert = (r >= 45) || (t >= 24) || (v >= 65);
+        const score = (r * 0.4) + ((t - 15) * 4) + (v * 0.2);
+
+        gauge.data.datasets[0].data = [score, 100 - score];
+        gauge.data.datasets[0].backgroundColor = [isAlert ? '#ff0000' : '#0070f3', '#1e293b'];
+        gauge.update();
+
+        if (isAlert) {
+            statusBox.textContent = "CRITICAL: SENSORY BLIND SPOT";
+            statusBox.style.backgroundColor = "#ff0000"; 
+            statusBox.style.color = "white";
+        } else {
+            statusBox.textContent = "STANDARD BASELINE";
+            statusBox.style.backgroundColor = "transparent";
+            statusBox.style.color = "#0070f3"; 
+        }
+    }
+
+    [rainIn, tempIn, visIn].forEach(el => el.addEventListener('input', refresh));
+    refresh();
+</script>
+</body>
+</html>
