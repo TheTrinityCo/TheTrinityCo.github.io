@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trinity Collective: The 2026 Mandate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f2; 
+            color: #1f2937;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* FORNICO WATERMARK */
+        body::before {
+            content: "FORNICO";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 15vw;
+            font-weight: 900;
+            color: rgba(239, 68, 68, 0.08); /* Red at low opacity */
+            z-index: -1;
+            pointer-events: none;
+            white-space: nowrap;
+            letter-spacing: 0.5em;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            height: 350px;
+            max-height: 400px;
+            margin: 0 auto;
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .transition-all-300 {
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+    <!-- Chosen Palette: Coastal Logic - Sand (#f5f5f2), Deep Ocean (#1e3a8a), Signal Red (#ef4444) -->
+    <!-- Application Structure Plan: 
+         1. Header: Establish context.
+         2. Context Module: Visualize Trigger-Based vs Static governance.
+         3. The Engine Module: Define the 2+2 Human/AI stack.
+         4. Assessment: Comparative Radar of Boldness vs Utility.
+         5. The Mandates: High-order strategic actions.
+    -->
+    <!-- Visualization & Content Choices:
+         - Line Chart: Rain vs Risk discrepancy.
+         - Radar: Capability comparison.
+         - Grid: Functional breakdown of the 2+2 workflow.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-[#f5f5f2] min-h-screen p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto space-y-8 relative z-10">
+
+        <!-- Header Section -->
+        <header class="bg-white/90 backdrop-blur-sm rounded-xl p-8 card-shadow border-l-8 border-[#1e3a8a]">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-[#1e3a8a] tracking-tight">The Trinity Mandate</h1>
+                    <p class="text-gray-500 text-lg mt-2">Assessment of the 2026 "Live Test" & Protocol 4NICO</p>
+                </div>
+                <div class="bg-[#ef4444] text-white px-4 py-2 rounded-lg text-sm font-semibold uppercase tracking-wider">
+                    Priority: High
+                </div>
+            </div>
+            <div class="mt-6 border-t pt-4">
+                <p class="text-gray-700 max-w-4xl leading-relaxed">
+                    <strong>Briefing:</strong> The Trinity Collective's "Live Test" is a response to institutional decay. By moving from theory to published code in under 24 hours, the 2+2 model solves the "Data Interpretation" problem that traditional SOPs ignore. This document analyzes the shift from mourning to mandate.
+                </p>
+            </div>
+        </header>
+
+        <!-- Main Analysis Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+            <!-- Section 1: The Context -->
+            <section class="bg-white/90 backdrop-blur-sm rounded-xl p-6 card-shadow flex flex-col">
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b pb-2 mb-2">1. The Logic of Deferral</h2>
+                    <p class="text-sm text-gray-600 mb-4">
+                        The "Live Test" targets <strong>Australia Day 2026</strong>. It forces a choice between Institutional Theatre and Local Action. 
+                    </p>
+                    <div class="flex space-x-2 mb-4">
+                        <button id="btn-static" class="px-4 py-2 text-xs font-bold rounded bg-gray-200 text-gray-700" onclick="updateRiskChart('static')">SOP (STATIC)</button>
+                        <button id="btn-trinity" class="px-4 py-2 text-xs font-bold rounded bg-[#1e3a8a] text-white" onclick="updateRiskChart('trinity')">TRINITY (DYNAMIC)</button>
+                    </div>
+                </div>
+                <div class="flex-grow">
+                    <div class="chart-container">
+                        <canvas id="riskChart"></canvas>
+                    </div>
+                </div>
+                <div id="risk-insight" class="mt-4 p-3 bg-gray-50 rounded border text-sm italic"></div>
+            </section>
+
+            <!-- Section 2: Boldness vs Utility -->
+            <section class="bg-white/90 backdrop-blur-sm rounded-xl p-6 card-shadow flex flex-col">
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b pb-2 mb-2">2. Boldness vs. Utility</h2>
+                    <p class="text-sm text-gray-600 mb-4">
+                        Tempo is the primary currency of safety. While Trinity operates outside formal SOPs, its utility in removing cognitive burden from swimmers is strategic.
+                    </p>
+                </div>
+                <div class="flex-grow">
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+                <div class="mt-4 p-2 bg-red-50 rounded text-xs text-red-800 font-semibold text-center uppercase tracking-widest">
+                    Governing with the Tempo of the Tide
+                </div>
+            </section>
+        </div>
+
+        <!-- Section 3: The Engine -->
+        <section class="bg-white/90 backdrop-blur-sm rounded-xl p-6 card-shadow">
+            <h2 class="text-2xl font-bold text-gray-800 border-b pb-2 mb-4">3. The Engine: 2+2 Optimization</h2>
+            <p class="text-gray-600 mb-6 text-sm">
+                Humans provide <strong>Directed Intent</strong>; AI Agents provide <strong>Patterning</strong>. The Interface bridges the gap, allowing for a collapsed response time.
+            </p>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="p-4 bg-gray-50 border rounded-lg cursor-pointer hover:border-[#1e3a8a]" onclick="showDetail('human')">
+                    <div class="font-bold text-[#1e3a8a]">2 Humans</div>
+                    <div class="text-xs">Moral Ambition</div>
+                </div>
+                <div class="p-4 bg-gray-50 border rounded-lg cursor-pointer hover:border-[#1e3a8a]" onclick="showDetail('ai')">
+                    <div class="font-bold text-[#1e3a8a]">2 AI Agents</div>
+                    <div class="text-xs">Telemetry Patterning</div>
+                </div>
+                <div class="p-4 bg-gray-50 border rounded-lg cursor-pointer hover:border-[#1e3a8a]" onclick="showDetail('interface')">
+                    <div class="font-bold text-[#1e3a8a]">The Interface</div>
+                    <div class="text-xs">Rapid Deployment</div>
+                </div>
+                <div class="p-4 bg-gray-50 border rounded-lg cursor-pointer hover:border-[#1e3a8a]" onclick="showDetail('cognition')">
+                    <div class="font-bold text-[#1e3a8a]">Cognition</div>
+                    <div class="text-xs">Augmented Deciders</div>
+                </div>
+            </div>
+            <div id="detail-box" class="mt-4 p-4 bg-[#1e3a8a] text-white rounded-lg hidden text-sm"></div>
+        </section>
+
+        <!-- Section 4: The Mandate -->
+        <section class="bg-white/90 backdrop-blur-sm rounded-xl p-6 card-shadow">
+            <h2 class="text-2xl font-bold text-gray-800 border-b pb-2 mb-4">4. Strategic Mandates</h2>
+            <div class="space-y-2">
+                <div class="p-4 bg-gray-50 border-l-4 border-red-500 rounded">
+                    <h3 class="font-bold text-gray-800">Condition-Based Governance</h3>
+                    <p class="text-xs text-gray-600">Explicitly define the 45mm rainfall limit as a mandate for immediate action.</p>
+                </div>
+                <div class="p-4 bg-gray-50 border-l-4 border-red-500 rounded">
+                    <h3 class="font-bold text-gray-800">Sensory Protocols (4NICO)</h3>
+                    <p class="text-xs text-gray-600">Mobile, plain-language signage at the "edge of decision" when turbidity peaks.</p>
+                </div>
+                <div class="p-4 bg-gray-50 border-l-4 border-red-500 rounded">
+                    <h3 class="font-bold text-gray-800">Infrastructure Accountability</h3>
+                    <p class="text-xs text-gray-600">Treat the Malabar fatberg and outfall as active public safety hazards.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center pb-8 opacity-60 text-xs uppercase tracking-widest font-bold">
+            FORNICO | Trinity Collective | 2026
+        </footer>
+    </div>
+
+    <script>
+        const riskData = {
+            labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5 (Rain)', 'Day 6', 'Day 7'],
+            rainfall: [0, 5, 10, 8, 55, 20, 5],
+            sop: [20, 20, 20, 20, 20, 20, 20],
+            trinity: [10, 15, 20, 25, 95, 80, 40]
+        };
+
+        let riskChart;
+        window.onload = () => {
+            initCharts();
+            updateRiskChart('static');
+        };
+
+        function initCharts() {
+            const ctxRisk = document.getElementById('riskChart').getContext('2d');
+            riskChart = new Chart(ctxRisk, {
+                type: 'line',
+                data: {
+                    labels: riskData.labels,
+                    datasets: [
+                        { label: 'Rain (mm)', data: riskData.rainfall, borderColor: '#94a3b8', yAxisID: 'y1', type: 'bar', backgroundColor: 'rgba(148,163,184,0.1)' },
+                        { label: 'Risk Signal', data: riskData.sop, borderColor: '#ef4444', yAxisID: 'y2', tension: 0.3 }
+                    ]
+                },
+                options: { maintainAspectRatio: false, scales: { y1: { position: 'left' }, y2: { position: 'right', min: 0, max: 100 } } }
+            });
+
+            const ctxRadar = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctxRadar, {
+                type: 'radar',
+                data: {
+                    labels: ['Tempo', 'Synthesis', 'Authority', 'Clarity', 'Liability', 'Adaptation'],
+                    datasets: [
+                        { label: 'Trinity', data: [95, 90, 30, 85, 40, 95], borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)' },
+                        { label: 'SOP', data: [30, 40, 95, 50, 90, 20], borderColor: '#1e3a8a', backgroundColor: 'rgba(30,58,138,0.1)' }
+                    ]
+                },
+                options: { maintainAspectRatio: false }
+            });
+        }
+
+        function updateRiskChart(type) {
+            riskChart.data.datasets[1].data = type === 'static' ? riskData.sop : riskData.trinity;
+            document.getElementById('risk-insight').textContent = type === 'static' 
+                ? "Static SOP: Risk signal ignores environmental triggers. Institutional lag creates a hazard gap."
+                : "Trinity 4NICO: Signal spikes instantly at 45mm rain. Protocol bridges the gap between condition and response.";
+            riskChart.update();
+        }
+
+        const details = {
+            human: "Humans provide the 'Directed Intent': Setting the moral ambition (the 45mm threshold) to prevent another Nico Antic tragedy.",
+            ai: "AI Agents provide the 'Patterning': Synthesizing telemetry, EAC shifts, and statutory laws into functional code.",
+            interface: "A rapid-deploy system already utilized in housing and infrastructure, bridging the transition from data to public notice.",
+            cognition: "The AI is in us. Human deciders augmented by a digital nervous system that detects environmental spikes immediately."
+        };
+
+        function showDetail(key) {
+            const box = document.getElementById('detail-box');
+            box.textContent = details[key];
+            box.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
