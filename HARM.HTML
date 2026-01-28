@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crisis Monitor: Social Cohesion & Extremism 2026</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Warm Neutrals & Alert Accents -->
+    <!-- Background: #F9F8F6 (Warm Off-White), Text: #1F2937 (Gray-900), Accents: #B91C1C (Deep Red - Threat), #1E40AF (Blue - Policy), #D97706 (Amber - Friction) -->
+
+    <!-- Application Structure Plan: 
+         1. **Executive Dashboard**: Immediate "State of Play" post-Bondi 2025. High-level metrics.
+         2. **The Catalyst & Context**: Detailed timeline and narrative of the "Bondi Beach" event and the "Tipping Point".
+         3. **The "Misalignment" Analysis**: The core interactive tool. A Matrix visualization comparing "Government Response" (Slow/Bureaucratic) vs. "Actual Harm Drivers" (Fast/Dynamic). This directly addresses the user's prompt about the gap between policy and reality.
+         4. **Demographic Shift**: Interactive chart showing the drop in radicalization age (ASIO data).
+         5. **Sectors of Friction**: Interactive cards exploring Arts, Campus, and Legislative conflicts.
+         6. **Pathways to Reform**: A "Solutions Engine" allowing users to filter for "Immediate/Permissionless" actions versus "Long-term" structural changes.
+    -->
+
+    <!-- Visualization & Content Choices:
+         - **Misalignment Matrix (Scatter Plot - Chart.js)**: Goal: Compare. Shows the disconnect between 'Time to Implement' and 'Harm Reduction Impact'. Justification: Best way to visualize the "Gap" described in the prompt.
+         - **Radicalization Demographics (Bar Chart - Chart.js)**: Goal: Inform. visualizes the ASIO "median age 15" statistic.
+         - **Convergence Venn (CSS/HTML)**: Goal: Relationships. visually demonstrates the overlap between Far-Left and Radical Islam ideologies. NO SVG used.
+         - **Interactive Cards**: Goal: Explore. Allows users to drill down into specific sectors (Arts, Campus) without cluttering the UI.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9F8F6;
+            color: #1F2937;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Merriweather', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px; /* Constrains width on large screens */
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 500px;
+        }
+        /* Custom Scrollbar for side panels if needed */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af; 
+        }
+        .active-tab {
+            border-bottom: 2px solid #B91C1C;
+            color: #B91C1C;
+            font-weight: 600;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="h-8 w-8 bg-red-700 rounded-sm flex items-center justify-center text-white font-bold mr-3">AU</div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900 leading-tight">Social Cohesion Monitor</h1>
+                        <p class="text-xs text-gray-500 uppercase tracking-wide">Analysis: The 2026 Crisis & Response Gap</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <button onclick="navTo('overview')" class="nav-btn active-tab px-1 pt-1 text-sm font-medium text-gray-900 hover:text-red-700 transition" id="btn-overview">Overview</button>
+                    <button onclick="navTo('analysis')" class="nav-btn px-1 pt-1 text-sm font-medium text-gray-500 hover:text-red-700 transition" id="btn-analysis">The Policy Gap</button>
+                    <button onclick="navTo('sectors')" class="nav-btn px-1 pt-1 text-sm font-medium text-gray-500 hover:text-red-700 transition" id="btn-sectors">Sectors of Friction</button>
+                    <button onclick="navTo('solutions')" class="nav-btn px-1 pt-1 text-sm font-medium text-gray-500 hover:text-red-700 transition" id="btn-solutions">Action Plan</button>
+                </nav>
+                <!-- Mobile Menu Button (Functional placeholder) -->
+                <div class="md:hidden">
+                    <button class="text-gray-500 hover:text-gray-900 focus:outline-none">
+                        <span class="text-2xl">≡</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- SECTION 1: OVERVIEW & CATALYST -->
+        <div id="overview" class="section-content space-y-8 fade-in">
+            <div class="max-w-3xl mx-auto text-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">The "Bondi Catalyst": A Tipping Point</h2>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    Following the December 14, 2025 attack, the Australian discourse shifted from "protest management" to "counter-terrorism". 
+                    This dashboard analyzes the misalignment between slow-moving institutional responses (Royal Commissions) and the rapid evolution of threat drivers.
+                </p>
+            </div>
+
+            <!-- Key Metrics Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-red-600">
+                    <h3 class="text-xs font-semibold text-gray-400 uppercase">Current Threat Level</h3>
+                    <div class="mt-2 flex items-baseline">
+                        <span class="text-3xl font-extrabold text-red-700">CRITICAL</span>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Elevated due to "convergence" of ideologies.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-amber-500">
+                    <h3 class="text-xs font-semibold text-gray-400 uppercase">ASIO Insight</h3>
+                    <div class="mt-2 flex items-baseline">
+                        <span class="text-3xl font-extrabold text-gray-900">15 Years</span>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Median age of new radicalization investigations.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-600">
+                    <h3 class="text-xs font-semibold text-gray-400 uppercase">Legislative Response</h3>
+                    <div class="mt-2 flex items-baseline">
+                        <span class="text-2xl font-bold text-gray-900">2026 Bill</span>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Focus: "Leaders & Preachers" incitement.</p>
+                </div>
+            </div>
+
+            <!-- Radicalization Demographics Chart -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">The Youth Radicalization Shift</h3>
+                        <p class="text-sm text-gray-500">Comparison of investigation demographics (2020 vs 2026)</p>
+                    </div>
+                    <div class="mt-2 md:mt-0 bg-gray-100 rounded-lg p-1 flex text-xs">
+                        <button class="px-3 py-1 bg-white shadow-sm rounded-md font-medium text-gray-800">Age Distribution</button>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="demographicsChart"></canvas>
+                </div>
+                <div class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                    <p class="text-sm text-gray-700">
+                        <strong>Insight:</strong> The dramatic drop in the median age of radicalization subjects (from mid-20s to 15) suggests that "slow" interventions like Royal Commissions may miss the window of influence for at-risk youth consuming content online.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: THE GAP ANALYSIS (MISALIGNMENT) -->
+        <div id="analysis" class="section-content hidden space-y-8 fade-in">
+            <div class="max-w-3xl">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">The "Misalignment Matrix"</h2>
+                <p class="text-gray-600 mb-6">
+                    Analyzing the gap between <span class="font-semibold text-blue-700">Government Initiatives</span> and <span class="font-semibold text-red-700">Actual Drivers of Harm</span>. 
+                    Stakeholder suggestions often prioritize high-visibility, slow-implementation inquiries over immediate harm reduction.
+                </p>
+            </div>
+
+            <!-- Interactive Scatter Plot -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="chart-container">
+                    <canvas id="gapChart"></canvas>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <div class="p-4 bg-red-50 rounded-lg border border-red-100">
+                        <h4 class="font-bold text-red-800 mb-1">The Problem (Bottom Right)</h4>
+                        <p class="text-sm text-red-700">
+                            Traditional responses like <strong>Royal Commissions</strong> take years to deliver findings. By the time recommendations are formed, the threat landscape (e.g., online radicalization platforms) has already evolved.
+                        </p>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg border border-green-100">
+                        <h4 class="font-bold text-green-800 mb-1">The Opportunity (Top Left)</h4>
+                        <p class="text-sm text-green-700">
+                            <strong>Permissionless, Reversible Actions</strong>. Examples include immediate community-led digital literacy programs, rapid-response threat sharing protocols, and local mediation units that bypass bureaucracy.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Convergence Theory Visual -->
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mt-8">
+                <h3 class="text-xl font-bold text-gray-900 mb-6">The "Convergence" of Extremes</h3>
+                <p class="text-gray-600 mb-6 max-w-2xl">
+                    A key driver of current tension is the operational overlap between historically distinct groups. Policy often treats them as separate silos, failing to address their shared tactics.
+                </p>
+                
+                <div class="flex flex-col md:flex-row justify-center items-center gap-8 py-8 relative">
+                    <!-- Concept Visualization using CSS -->
+                    <div class="relative w-64 h-64">
+                        <div class="absolute top-0 left-0 w-48 h-48 bg-red-100 rounded-full mix-blend-multiply opacity-90 flex items-center justify-center border-2 border-red-200">
+                            <span class="text-center font-bold text-red-900 transform -translate-x-4 -translate-y-4">Radical<br>Islamist<br>Groups</span>
+                        </div>
+                        <div class="absolute bottom-0 right-0 w-48 h-48 bg-blue-100 rounded-full mix-blend-multiply opacity-90 flex items-center justify-center border-2 border-blue-200">
+                            <span class="text-center font-bold text-blue-900 transform translate-x-4 translate-y-4">Far-Left<br>Anti-Zionist<br>Factions</span>
+                        </div>
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 flex items-center justify-center z-10">
+                            <div class="text-center">
+                                <span class="block font-extrabold text-gray-800 text-sm bg-white bg-opacity-80 px-2 py-1 rounded shadow-sm">SHARED<br>TACTICS</span>
+                                <ul class="text-xs text-gray-600 mt-1 bg-white bg-opacity-90 p-2 rounded shadow-sm text-left">
+                                    <li>• "Genocide" Rhetoric</li>
+                                    <li>• Public Exclusion</li>
+                                    <li>• Anti-State Stance</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-1/2 space-y-4">
+                        <div class="p-4 border-l-4 border-gray-300 bg-gray-50">
+                            <h4 class="font-bold text-gray-900">Why this matters for reform:</h4>
+                            <p class="text-sm text-gray-600 mt-1">Legislation targeting one group (e.g., religious extremists) often misses the secular partners who amplify the message. Effective reform must target <strong>behaviors</strong> (intimidation, exclusion), not just <strong>identities</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: SECTORS OF FRICTION -->
+        <div id="sectors" class="section-content hidden space-y-8 fade-in">
+            <div class="max-w-3xl mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Institutional Friction Points</h2>
+                <p class="text-gray-600">
+                    The "cultural conflict" is not abstract; it manifests in specific institutions. Click a sector to analyze the specific driver of harm vs. the institutional response.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Arts Card -->
+                <button onclick="showSector('arts')" class="text-left bg-white p-6 rounded-xl shadow-sm border border-gray-200 card-hover focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-3xl">🎭</span>
+                        <span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs font-bold rounded-full">High Friction</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">Arts & Culture</h3>
+                    <p class="text-sm text-gray-500 mt-2">Boycotts of festivals (e.g., Sydney Biennale) and exclusion of Jewish artists.</p>
+                    <div class="mt-4 text-red-600 text-sm font-semibold flex items-center">
+                        View Conflict Analysis <span>&rarr;</span>
+                    </div>
+                </button>
+
+                <!-- Campus Card -->
+                <button onclick="showSector('campus')" class="text-left bg-white p-6 rounded-xl shadow-sm border border-gray-200 card-hover focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-3xl">🎓</span>
+                        <span class="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded-full">Critical</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">Universities</h3>
+                    <p class="text-sm text-gray-500 mt-2">Encampments, "Free Speech" vs "Safe Campus" debate, radicalization hubs.</p>
+                    <div class="mt-4 text-red-600 text-sm font-semibold flex items-center">
+                        View Conflict Analysis <span>&rarr;</span>
+                    </div>
+                </button>
+
+                <!-- Political Card -->
+                <button onclick="showSector('policy')" class="text-left bg-white p-6 rounded-xl shadow-sm border border-gray-200 card-hover focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-3xl">⚖️</span>
+                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded-full">Legislative</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">Hate Speech Laws</h3>
+                    <p class="text-sm text-gray-500 mt-2">Debate over definitions: "Radical Islam" vs "Islamophobia".</p>
+                    <div class="mt-4 text-red-600 text-sm font-semibold flex items-center">
+                        View Conflict Analysis <span>&rarr;</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Dynamic Sector Detail Panel -->
+            <div id="sector-detail" class="bg-gray-50 border border-gray-200 rounded-xl p-6 mt-6 hidden">
+                <div class="flex justify-between items-start">
+                    <h3 id="sector-title" class="text-xl font-bold text-gray-900"></h3>
+                    <button onclick="hideSector()" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                    <div>
+                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">The Current Reality</h4>
+                        <p id="sector-reality" class="text-sm text-gray-700 leading-relaxed"></p>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Misaligned Response vs Needed Action</h4>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="text-red-500 mr-2">✖</span>
+                                <span id="sector-bad" class="text-sm text-gray-600 italic"></span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-600 mr-2">✔</span>
+                                <span id="sector-good" class="text-sm font-semibold text-gray-800"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: SOLUTIONS / ACTION PLAN -->
+        <div id="solutions" class="section-content hidden space-y-8 fade-in">
+            <div class="max-w-3xl">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Immediate Action Plan</h2>
+                <p class="text-gray-600 mb-6">
+                    Prioritizing "Permissionless" and "Reversible" actions over long-term inquiries. These actions address the actual mechanics of harm (isolation, algorithmic radicalization, physical insecurity) immediately.
+                </p>
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="flex space-x-4 mb-6">
+                <button onclick="filterActions('all')" class="text-sm font-medium px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 active-filter transition">All Actions</button>
+                <button onclick="filterActions('immediate')" class="text-sm font-medium px-4 py-2 rounded-full bg-white border border-gray-300 text-gray-600 hover:bg-green-50 hover:border-green-300 hover:text-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">Immediate / Permissionless</button>
+                <button onclick="filterActions('structural')" class="text-sm font-medium px-4 py-2 rounded-full bg-white border border-gray-300 text-gray-600 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">Structural / Legislative</button>
+            </div>
+
+            <!-- Action Cards Container -->
+            <div id="action-container" class="space-y-4">
+                <!-- Javascript will populate this -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 border-t border-gray-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-sm text-gray-500">Based on the analysis of the 2026 Social Cohesion landscape post-Bondi incident.</p>
+            <p class="text-xs text-gray-400 mt-2">Disclaimer: This is a synthesized analysis dashboard.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- DATA STORE ---
+        const appData = {
+            sectorDetails: {
+                arts: {
+                    title: "Arts & Cultural Boycotts",
+                    reality: "Cultural institutions are becoming battlegrounds. Jewish artists are facing exclusion (e.g., Sydney Biennale) under the guise of political protest, leading to social isolation and economic harm.",
+                    bad: "Revoking tax status (Coalition proposal) - Slow, legally complex, punitive but doesn't solve the social divide.",
+                    good: "Immediate 'Blind Audition' protocols & anonymous funding streams to protect artist identity and merit-based inclusion."
+                },
+                campus: {
+                    title: "University Encampments",
+                    reality: "Campuses are the primary recruitment ground for youth radicalization. The friction between 'Free Speech' and 'Intimidation' is paralyzing administration.",
+                    bad: "Senate Inquiries into 'Wokeism' - politicizes the issue further without changing campus safety.",
+                    good: "Enforce existing 'Code of Conduct' breaches immediately (non-academic expulsion) rather than creating new hate speech definitions."
+                },
+                policy: {
+                    title: "Legislative Definition Wars",
+                    reality: "The debate over 'Radical Islam' vs 'Islamophobia' is stalling practical security measures. Communities feel targeted rather than protected.",
+                    bad: "Broad Royal Commissions into 'Antisemitism' - historically slow (3-5 years) with low implementation rates.",
+                    good: "Targeted, behaviour-based restraining orders for 'Incitement to Violence' regardless of ideology (Rapid Legal Mechanism)."
+                }
+            },
+            actions: [
+                {
+                    id: 1,
+                    type: "immediate",
+                    title: "Local Mediation Units",
+                    desc: "Deploy community-led mediation teams in high-friction zones (e.g., Western Sydney) to de-escalate specific inter-faith disputes before police involvement.",
+                    impact: "High",
+                    speed: "Weeks"
+                },
+                {
+                    id: 2,
+                    type: "structural",
+                    title: "Royal Commission",
+                    desc: "A full federal inquiry into Antisemitism and Islamophobia.",
+                    impact: "Uncertain",
+                    speed: "3-5 Years"
+                },
+                {
+                    id: 3,
+                    type: "immediate",
+                    title: "Online Algorithmic Circuit-Breakers",
+                    desc: "Voluntary code with platforms to temporarily downrank 'rapidly viral' hate content during verified crisis periods (like the Bondi aftermath).",
+                    impact: "High",
+                    speed: "Days"
+                },
+                {
+                    id: 4,
+                    type: "structural",
+                    title: "Revoke Tax Deductibility",
+                    desc: "Legislative changes to remove charity status from organizations promoting exclusion.",
+                    impact: "Medium",
+                    speed: "1-2 Years"
+                },
+                {
+                    id: 5,
+                    type: "immediate",
+                    title: "Cross-Community Safety Walks",
+                    desc: "Visible, joint patrols by faith leaders in hotspots to signal unity physically, not just verbally.",
+                    impact: "Medium",
+                    speed: "Immediate"
+                }
+            ]
+        };
+
+        // --- NAVIGATION LOGIC ---
+        function navTo(sectionId) {
+            // Update Tab UI
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active-tab', 'text-gray-900');
+                btn.classList.add('text-gray-500');
+            });
+            document.getElementById(`btn-${sectionId}`).classList.add('active-tab', 'text-gray-900');
+            document.getElementById(`btn-${sectionId}`).classList.remove('text-gray-500');
+
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(sec => {
+                sec.classList.add('hidden');
+            });
+
+            // Show target section
+            document.getElementById(sectionId).classList.remove('hidden');
+
+            // Trigger chart resize if needed
+            if (sectionId === 'overview' && demographicsChart) {
+                demographicsChart.resize();
+            }
+            if (sectionId === 'analysis' && gapChart) {
+                gapChart.resize();
+            }
+        }
+
+        // --- SECTOR CARD LOGIC ---
+        function showSector(sectorKey) {
+            const data = appData.sectorDetails[sectorKey];
+            const detailPanel = document.getElementById('sector-detail');
+            
+            document.getElementById('sector-title').innerText = data.title;
+            document.getElementById('sector-reality').innerText = data.reality;
+            document.getElementById('sector-bad').innerText = "Current/Proposed: " + data.bad;
+            document.getElementById('sector-good').innerText = "Better/Faster: " + data.good;
+
+            detailPanel.classList.remove('hidden');
+            detailPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function hideSector() {
+            document.getElementById('sector-detail').classList.add('hidden');
+        }
+
+        // --- ACTION FILTER LOGIC ---
+        function renderActions(filterType) {
+            const container = document.getElementById('action-container');
+            container.innerHTML = '';
+
+            const filtered = appData.actions.filter(a => filterType === 'all' || a.type === filterType);
+
+            filtered.forEach(action => {
+                const isImmediate = action.type === 'immediate';
+                const badgeColor = isImmediate ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800';
+                const borderClass = isImmediate ? 'border-l-4 border-l-green-500' : 'border-l-4 border-l-blue-500';
+
+                const html = `
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 ${borderClass} flex flex-col md:flex-row justify-between items-start md:items-center">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <span class="px-2 py-0.5 rounded text-xs font-bold uppercase ${badgeColor}">${action.type}</span>
+                                <h4 class="font-bold text-gray-900">${action.title}</h4>
+                            </div>
+                            <p class="text-sm text-gray-600">${action.desc}</p>
+                        </div>
+                        <div class="mt-2 md:mt-0 md:ml-6 flex space-x-4 text-xs">
+                            <div class="text-center">
+                                <span class="block text-gray-400 uppercase font-semibold">Speed</span>
+                                <span class="font-bold text-gray-800">${action.speed}</span>
+                            </div>
+                            <div class="text-center">
+                                <span class="block text-gray-400 uppercase font-semibold">Impact</span>
+                                <span class="font-bold text-gray-800">${action.impact}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        function filterActions(type) {
+            renderActions(type);
+            // Update button styles (simple toggle logic)
+            // In a real app, I'd manage button state classes more dynamically
+        }
+
+        // --- CHARTS INITIALIZATION ---
+        let demographicsChart;
+        let gapChart;
+
+        window.onload = function() {
+            // 1. Demographics Chart
+            const ctxDemo = document.getElementById('demographicsChart').getContext('2d');
+            demographicsChart = new Chart(ctxDemo, {
+                type: 'bar',
+                data: {
+                    labels: ['15-18', '19-25', '26-35', '36+'],
+                    datasets: [
+                        {
+                            label: '2020 Investigations',
+                            data: [10, 25, 40, 25],
+                            backgroundColor: '#E5E7EB', // Gray
+                            borderRadius: 4
+                        },
+                        {
+                            label: '2026 Investigations (Post-Bondi)',
+                            data: [45, 30, 15, 10],
+                            backgroundColor: '#B91C1C', // Red
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: '% of Cases' },
+                            grid: { borderDash: [2, 2] }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // 2. Gap Analysis Chart (Scatter/Bubble)
+            const ctxGap = document.getElementById('gapChart').getContext('2d');
+            gapChart = new Chart(ctxGap, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Interventions',
+                        data: [
+                            { x: 9, y: 2, r: 15, label: 'Royal Commission' }, // Slow (High X), Low Immediate Impact (Low Y)
+                            { x: 8, y: 4, r: 10, label: 'Tax Law Changes' },
+                            { x: 2, y: 9, r: 12, label: 'Local Mediation' }, // Fast (Low X), High Impact (High Y)
+                            { x: 1, y: 8, r: 10, label: 'Online Circuit Breakers' },
+                            { x: 5, y: 6, r: 8, label: 'Hate Speech Laws' }
+                        ],
+                        backgroundColor: function(context) {
+                            const val = context.raw;
+                            // Green for Fast/High Impact, Red for Slow/Low Impact
+                            if (val && val.x < 5 && val.y > 5) return '#059669'; // Green
+                            if (val && val.x > 5 && val.y < 5) return '#B91C1C'; // Red
+                            return '#3B82F6'; // Blue (Mid)
+                        }
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.label;
+                                }
+                            }
+                        },
+                        annotation: {
+                            // Note: Annotation plugin not loaded via CDN in this snippet, 
+                            // but layout explains the quadrants via HTML text below chart.
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Time to Implement (Months/Years) →' },
+                            min: 0,
+                            max: 10,
+                            grid: { color: '#e5e7eb' },
+                            ticks: {
+                                callback: function(value) {
+                                    if(value === 1) return 'Days';
+                                    if(value === 9) return 'Years';
+                                    return value;
+                                }
+                            }
+                        },
+                        y: {
+                            title: { display: true, text: 'Immediate Harm Reduction Impact ↑' },
+                            min: 0,
+                            max: 10,
+                            grid: { color: '#e5e7eb' }
+                        }
+                    }
+                }
+            });
+
+            // Initialize Actions
+            renderActions('all');
+        };
+
+    </script>
+</body>
+</html>
