@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEWCASTLE OS | TRINITY PILOT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --text-primary: #e2e8f0;
+            --trinity-gold: #fbbf24;
+            --alert-red: #ef4444;
+            --panel-bg: #0a0a0a;
+            --border-muted: #1e293b;
+        }
+        body { background-color: var(--bg-primary); color: var(--text-primary); font-family: 'Inter', sans-serif; line-height: 1.6; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .gold-text { color: var(--trinity-gold); }
+        .slide-container { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 4rem 2rem; border-bottom: 1px solid #111; }
+        
+        /* The "Magnum 45" Headers */
+        h1 { font-weight: 900; letter-spacing: -0.05em; line-height: 0.9; text-transform: uppercase; }
+        h2 { font-weight: 700; letter-spacing: -0.03em; color: white; margin-bottom: 1rem; }
+        
+        /* Range Sliders */
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: var(--trinity-gold); margin-top: -6px; cursor: pointer; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #334155; border-radius: 2px; }
+        
+        .flag-card { transition: all 0.3s ease; border: 1px solid var(--border-muted); }
+        .flag-card:hover { border-color: var(--trinity-gold); transform: translateY(-5px); }
+
+        /* Navigation Dots */
+        .nav-dot { width: 10px; height: 10px; background: #333; border-radius: 50%; margin: 5px 0; cursor: pointer; transition: background 0.3s; }
+        .nav-dot.active { background: var(--trinity-gold); }
+    </style>
+</head>
+<body class="relative">
+
+    <!-- Fixed Sidebar Nav -->
+    <div class="fixed right-6 top-1/2 transform -translate-y-1/2 space-y-4 z-50 hidden md:block">
+        <div class="nav-dot active" onclick="scrollToSlide(0)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(1)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(2)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(3)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(4)"></div>
+    </div>
+
+    <!-- SLIDE 1: TITLE -->
+    <section class="slide-container max-w-5xl mx-auto text-center" id="slide-0">
+        <div class="inline-block border border-slate-700 px-4 py-1 rounded-full text-xs mono text-slate-500 mb-8">
+            PROPOSAL FOR CEO / NEWCASTLE CITY COUNCIL
+        </div>
+        <h1 class="text-6xl md:text-8xl text-white mb-6">
+            NEWCASTLE <span class="gold-text">OS</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto font-light">
+            Operationalizing the lessons of Jan 2026.
+            <br>Converting <span class="text-white font-bold">Smart City Infrastructure</span> into <span class="text-white font-bold">Public Safety Reality</span>.
+        </p>
+        <div class="mt-12 flex justify-center space-x-8 text-xs mono text-slate-600">
+            <span>PREPARED BY: TRINITY COLLECTIVE</span>
+            <span>//</span>
+            <span>STATUS: DRAFT</span>
+        </div>
+    </section>
+
+    <!-- SLIDE 2: THE PROBLEM (BIOLOGY) -->
+    <section class="slide-container max-w-5xl mx-auto" id="slide-1">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-4xl">The Biological Chain</h2>
+                <p class="text-lg text-slate-400 mb-6 text-justify">
+                    Current protocols rely on visual confirmation (The Fin). This is too late. 
+                    The Jan 2026 spate proved that risk arrives 48 hours before the incident, driven by a specific data chain.
+                </p>
+                <ul class="space-y-4 text-slate-300">
+                    <li class="flex items-center"><span class="gold-text mr-4 text-xl">01.</span> <strong>Rainfall</strong> washes nutrients into the harbour.</li>
+                    <li class="flex items-center"><span class="gold-text mr-4 text-xl">02.</span> <strong>Nutrient Load</strong> spikes, attracting baitfish.</li>
+                    <li class="flex items-center"><span class="gold-text mr-4 text-xl">03.</span> <strong>Turbidity</strong> blinds the swimmers (and lifeguards).</li>
+                    <li class="flex items-center border-l-2 border-red-500 pl-4 bg-red-900/10 py-2"><span class="text-red-500 mr-4 text-xl">04.</span> <strong>Incident.</strong> The predator follows the bait into the blind spot.</li>
+                </ul>
+            </div>
+            <div class="bg-slate-900 p-8 rounded-xl border border-slate-800">
+                <div class="text-center mono text-xs text-slate-500 mb-4">DATA LATENCY GAP</div>
+                <div class="relative h-64 w-full">
+                     <!-- Simple CSS Visual for the Gap -->
+                     <div class="absolute bottom-0 left-0 w-1/4 h-full bg-slate-800 rounded-t-lg flex items-end justify-center pb-2 text-xs">Environment</div>
+                     <div class="absolute bottom-0 left-1/4 w-1/4 h-3/4 bg-slate-700 rounded-t-lg flex items-end justify-center pb-2 text-xs">Sensors</div>
+                     <div class="absolute bottom-0 left-2/4 w-1/4 h-1/4 bg-red-900/50 rounded-t-lg flex items-end justify-center pb-2 text-xs text-red-400">Incident</div>
+                     <div class="absolute bottom-0 left-3/4 w-1/4 h-1/6 bg-gold-500 bg-yellow-600 rounded-t-lg flex items-end justify-center pb-2 text-xs text-white">Response</div>
+                     
+                     <!-- The Arrow -->
+                     <div class="absolute top-10 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-red-500"></div>
+                     <div class="absolute top-6 left-1/4 text-xs text-green-500">Signal Available</div>
+                     <div class="absolute top-6 right-1/4 text-xs text-red-500">Action Taken</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 3: THE LIVE TOOL (DEMO) -->
+    <section class="slide-container max-w-4xl mx-auto" id="slide-2">
+        <div class="text-center mb-10">
+            <h2 class="text-4xl text-white">The Integration Layer</h2>
+            <p class="text-slate-400">We harness your existing IoT sensors to visualize the "Blind Spot" in real-time.</p>
+        </div>
+
+        <!-- THE INTERACTIVE DASHBOARD -->
+        <div class="bg-slate-900 p-6 md:p-10 rounded-2xl border-2 border-slate-800 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800"></div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Inputs -->
+                <div class="space-y-8 z-10">
+                    <div class="mono text-xs text-slate-500 mb-6 uppercase tracking-widest">Live Telemetry Injection</div>
+                    
+                    <!-- Rain -->
+                    <div>
+                        <div class="flex justify-between mb-2 text-xs font-bold text-slate-300 uppercase">
+                            <span>Rainfall (Trigger)</span>
+                            <span id="val-rain" class="gold-text mono">0mm</span>
+                        </div>
+                        <input type="range" id="input-rain" min="0" max="100" value="10" class="w-full">
+                    </div>
+
+                    <!-- Nutrients (NEW) -->
+                    <div>
+                        <div class="flex justify-between mb-2 text-xs font-bold text-slate-300 uppercase">
+                            <span>Nutrient Load (Attractant)</span>
+                            <span id="val-nutri" class="gold-text mono">Low</span>
+                        </div>
+                        <input type="range" id="input-nutri" min="0" max="100" value="20" class="w-full">
+                    </div>
+
+                    <!-- Turbidity -->
+                    <div>
+                        <div class="flex justify-between mb-2 text-xs font-bold text-slate-300 uppercase">
+                            <span>Turbidity (Visibility)</span>
+                            <span id="val-vis" class="gold-text mono">Clear</span>
+                        </div>
+                        <input type="range" id="input-vis" min="0" max="100" value="15" class="w-full">
+                    </div>
+                </div>
+
+                <!-- Output -->
+                <div class="flex flex-col items-center justify-center z-10">
+                    <div style="height: 200px; width: 200px;">
+                        <canvas id="riskGauge"></canvas>
+                    </div>
+                    
+                    <div id="risk-status" class="mt-6 w-full text-center py-4 border border-slate-700 bg-black rounded font-bold tracking-widest text-sm uppercase transition-colors duration-300">
+                        Analyzing...
+                    </div>
+                    <div id="flag-display" class="mt-2 text-xs mono text-slate-500">
+                        CURRENT PROTOCOL
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 4: THE PROTOCOL (BLACK FLAG) -->
+    <section class="slide-container max-w-5xl mx-auto" id="slide-3">
+        <h2 class="text-4xl mb-12 text-center">The "Black Flag" Education</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- GREEN -->
+            <div class="flag-card bg-slate-900 p-8 rounded-lg opacity-50">
+                <div class="w-12 h-12 rounded-full bg-green-500 mb-6"></div>
+                <h3 class="text-xl font-bold text-white mb-2">Standard</h3>
+                <p class="text-sm text-slate-400">Sensors are clear. Visibility is high. Standard patrols are effective.</p>
+            </div>
+
+            <!-- BLACK (HERO) -->
+            <div class="flag-card bg-slate-900 p-8 rounded-lg border-2 border-slate-600 transform scale-105 shadow-2xl relative">
+                <div class="absolute top-4 right-4 text-xs bg-slate-800 px-2 py-1 rounded text-white mono">NEWCASTLE OS</div>
+                <div class="w-12 h-12 rounded-full bg-black border border-slate-600 mb-6 flex items-center justify-center">
+                    <span class="text-white text-xs">?</span>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Data Blind</h3>
+                <p class="text-sm text-slate-300">
+                    <strong>The New Honesty.</strong> High turbidity means sensors and eyes are failing. We are not saying there <em>is</em> a shark. We are saying we <em>cannot know</em>.
+                </p>
+                <div class="mt-4 pt-4 border-t border-slate-800 text-xs text-yellow-500">
+                    > Triggered by: Turbidity > 60% OR High Nutrient Load
+                </div>
+            </div>
+
+            <!-- RED -->
+            <div class="flag-card bg-slate-900 p-8 rounded-lg opacity-50">
+                <div class="w-12 h-12 rounded-full bg-red-600 mb-6"></div>
+                <h3 class="text-xl font-bold text-white mb-2">Active Threat</h3>
+                <p class="text-sm text-slate-400">Physical sighting or acoustic tag detection. Clear and present danger.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 5: DEPLOYMENT & ASK -->
+    <section class="slide-container max-w-4xl mx-auto" id="slide-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+            <div>
+                <h2 class="text-4xl mb-6">Deployment: <span class="gold-text">Opt-In</span></h2>
+                <p class="text-lg text-slate-400 mb-8">
+                    We do not blast alerts to the general public. We avoid panic by targeting the "High Frequency User."
+                </p>
+                <div class="bg-white text-black p-6 rounded-lg max-w-xs mx-auto md:mx-0 shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+                    <div class="border-4 border-black p-2 mb-4">
+                        <!-- Mock QR -->
+                        <div class="w-full aspect-square bg-slate-200 flex items-center justify-center text-center p-4">
+                            [QR CODE]<br>SCAN FOR LIVE<br>NOBBYS DATA
+                        </div>
+                    </div>
+                    <div class="text-center font-bold uppercase text-sm">Safe Swim Check-In</div>
+                </div>
+            </div>
+
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-2">The Ask: A 10-Week Pilot</h3>
+                    <p class="text-slate-400 text-sm">
+                        Trinity acts as the middleware. We use your existing sensors to power the Opt-In notification network.
+                    </p>
+                </div>
+                
+                <ul class="space-y-4 text-sm mono text-slate-300 border-t border-slate-800 pt-8">
+                    <li class="flex justify-between">
+                        <span>PHASE 1:</span>
+                        <span class="text-white">API Integration (IoT Sensors)</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>PHASE 2:</span>
+                        <span class="text-white">Signage Installation (QR)</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>PHASE 3:</span>
+                        <span class="text-white">"Black Flag" Logic Activation</span>
+                    </li>
+                </ul>
+
+                <button class="w-full bg-slate-800 hover:bg-[#fbbf24] hover:text-black text-white font-bold py-4 px-8 rounded transition-colors duration-300 mt-8 uppercase tracking-widest border border-slate-700">
+                    Initiate Pilot Protocol
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // --- NAVIGATION LOGIC ---
+        function scrollToSlide(index) {
+            const slide = document.getElementById(`slide-${index}`);
+            slide.scrollIntoView({ behavior: 'smooth' });
+            
+            document.querySelectorAll('.nav-dot').forEach((dot, i) => {
+                if (i === index) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+        }
+
+        // --- CHART & LOGIC ---
+        const ctx = document.getElementById('riskGauge').getContext('2d');
+        const gauge = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [20, 80],
+                    backgroundColor: ['#334155', '#1e293b'],
+                    borderWidth: 0,
+                    cutout: '80%',
+                    rotation: -90,
+                    circumference: 180
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { enabled: false } }
+            }
+        });
+
+        // Inputs
+        const rainIn = document.getElementById('input-rain');
+        const nutriIn = document.getElementById('input-nutri');
+        const visIn = document.getElementById('input-vis');
+        const statusBox = document.getElementById('risk-status');
+        const displayBox = document.getElementById('flag-display');
+
+        function updateDashboard() {
+            const r = parseInt(rainIn.value);
+            const n = parseInt(nutriIn.value);
+            const v = parseInt(visIn.value);
+
+            // Update Labels
+            document.getElementById('val-rain').textContent = r + "mm";
+            document.getElementById('val-nutri').textContent = n > 50 ? "HIGH" : "NORMAL";
+            document.getElementById('val-vis').textContent = v > 50 ? "POOR" : "CLEAR";
+
+            // LOGIC: The Trinity Protocol
+            // Black Flag triggers if Visibility is bad (>60) OR Nutrients are high (>70)
+            const isBlind = (v > 60);
+            const isBioHazard = (n > 70) && (r > 20); // Rain washes nutrients in
+            const isHighRisk = isBlind || isBioHazard;
+
+            // Visual Score for Gauge
+            let score = (r * 0.3) + (n * 0.4) + (v * 0.3);
+            if (score > 100) score = 100;
+
+            // Gauge Colors
+            let gaugeColor = '#3b82f6'; // Blue (Safe)
+            if (isBioHazard) gaugeColor = '#fbbf24'; // Gold (Warning)
+            if (isBlind) gaugeColor = '#111111'; // Black (Blind)
+            if (score > 85) gaugeColor = '#ef4444'; // Red (Danger)
+
+            gauge.data.datasets[0].data = [score, 100 - score];
+            gauge.data.datasets[0].backgroundColor = [gaugeColor, '#1e293b'];
+            gauge.update();
+
+            // Status Text Update
+            if (isBlind) {
+                statusBox.textContent = "BLACK FLAG: SENSORS BLIND";
+                statusBox.style.backgroundColor = "black";
+                statusBox.style.color = "white";
+                statusBox.style.borderColor = "#fbbf24";
+                displayBox.textContent = "VISIBILITY < 2M // DO NOT SWIM";
+            } else if (isBioHazard) {
+                statusBox.textContent = "CAUTION: HIGH NUTRIENT LOAD";
+                statusBox.style.backgroundColor = "#fbbf24";
+                statusBox.style.color = "black";
+                statusBox.style.borderColor = "#fbbf24";
+                displayBox.textContent = "BAITFISH AGGREGATION DETECTED";
+            } else if (score > 85) {
+                statusBox.textContent = "RED FLAG: HIGH PROBABILITY";
+                statusBox.style.backgroundColor = "#ef4444";
+                statusBox.style.color = "white";
+                statusBox.style.borderColor = "#ef4444";
+                displayBox.textContent = "CRITICAL THRESHOLDS EXCEEDED";
+            } else {
+                statusBox.textContent = "GREEN FLAG: MONITORING";
+                statusBox.style.backgroundColor = "transparent";
+                statusBox.style.color = "#3b82f6";
+                statusBox.style.borderColor = "#3b82f6";
+                displayBox.textContent = "CONDITIONS OPTIMAL";
+            }
+        }
+
+        [rainIn, nutriIn, visIn].forEach(el => el.addEventListener('input', updateDashboard));
+        
+        // Init
+        updateDashboard();
+
+    </script>
+</body>
+</html>
